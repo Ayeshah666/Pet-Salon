@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paws & Primp Pet Salon</title>
+    <style>
+        :root {
+            --primary: #FF9BB3;
+            --secondary: #A2D7D8;
+            --accent: #FFD166;
+            --background: #F9F7F7;
+            --text: #3F3F3F;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            background-image: url('https://img.freepik.com/free-vector/paw-print-seamless-pattern-background_42349-755.jpg');
+            background-size: 200px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            border: 5px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: linear-gradient(90deg, 
+                var(--primary) 0%, 
+                var(--secondary) 33%, 
+                var(--accent) 66%, 
+                var(--primary) 100%);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+        
+        .pet-display {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            background-color: #FFF;
+            border-radius: 15px;
+            border: 3px dashed var(--secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .pet-image {
+            max-width: 100%;
+            max-height: 100%;
+            transition: all 0.3s;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--secondary);
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin: 20px 0;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.1);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+        }
+        
+        .btn i {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .btn-wash {
+            background-color: var(--secondary);
+        }
+        
+        .btn-style {
+            background-color: var(--accent);
+        }
+        
+        .tools-panel {
+            display: none;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 3px solid var(--secondary);
+        }
+        
+        .tools-panel h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .tool-btn {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .tool-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tool-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .accessories {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .accessory-category {
+            margin-bottom: 15px;
+        }
+        
+        .accessory-category h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .accessory-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .accessory-item {
+            width: 60px;
+            height: 60px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .accessory-item:hover {
+            transform: scale(1.1);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary);
+            opacity: 0;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        
+        /* Pet customization */
+        .pet-part {
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .action-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tools-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        dirty-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+            opacity: 0.7;
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            border-radius: 12px;
+        }
+        
+        .dirty-paws {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #5a4a42;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .clean-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            pointer-events: none;
+            border-radius: 12px;
+        }
+        
+        @keyframes cleanAnimation {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.5); }
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐾 Paws & Primp Salon 🐾</h1>
+            <p>Make your pet look fabulous!</p>
+        </header>
+        
+        <div class="stats-bar">
+            <div>Coins: <span id="coins">250</span> <i class="fas fa-coins"></i></div>
+            <div>Happiness: <span id="happiness">80</span>% <i class="fas fa-heart"></i></div>
+            <div>Cleanliness: <span id="cleanliness">60</span>% <i class="fas fa-soap"></i></div>
+        </div>
+        
+        <div class="pet-display" id="petDisplay">
+            <img src="puppy1.png" alt="Pet" class="pet-image" id="petBase">
+            <!-- Accessories will be added here dynamically -->
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-groom" onclick="openPanel('groom')">
+                <i class="fas fa-cut"></i>
+                Groom
+            </button>
+            <button class="btn btn-wash" onclick="openPanel('wash')">
+                <i class="fas fa-shower"></i>
+                Wash
+            </button>
+            <button class="btn btn-style" onclick="openPanel('style')">
+                <i class="fas fa-magic"></i>
+                Style
+            </button>
+            <button class="btn" onclick="openPanel('accessorize')">
+                <i class="fas fa-tshirt"></i>
+                Accessorize
+            </button>
+            <button class="btn" onclick="playWithPet()">
+                <i class="fas fa-gamepad"></i>
+                Play
+            </button>
+            <button class="btn" onclick="takePhoto()">
+                <i class="fas fa-camera"></i>
+                Photo
+            </button>
+        </div>
+        
+        <!-- Groom Panel -->
+        <div class="tools-panel" id="groomPanel">
+            <button class="close-btn" onclick="closePanel('groom')"><i class="fas fa-times"></i></button>
+            <h2>✂️ Grooming Tools ✂️</h2>
+            <div class="tools-grid">
+                <button class="tool-btn" onclick="useTool('scissors')">
+                    <i class="fas fa-cut"></i>
+                    Scissors
+                </button>
+                <button class="tool-btn" onclick="useTool('clippers')">
+                    <i class="fas fa-bolt"></i>
+                    Clippers
+                </button>
+                <button class="tool-btn" onclick="useTool('comb')">
+                    <i class="fas fa-arrows-alt-h"></i>
+                    Comb
+                </button>
+                <button class="tool-btn" onclick="useTool('brush')">
+                    <i class="fas fa-paint-brush"></i>
+                    Brush
+                </button>
+                <button class="tool-btn" onclick="applyStyle('puppy')">
+                    <i class="fas fa-dog"></i>
+                    Puppy Cut
+                </button>
+                <button class="tool-btn" onclick="applyStyle('spikes')">
+                    <i class="fas fa-lion"></i>
+                    Spikes Cut
+                </button>
+                <button class="tool-btn" onclick="applyStyle('pigtails')">
+                    <i class="fas fa-fire"></i>
+                    PigTails
+                </button>
+                <button class="tool-btn" onclick="applyStyle('moustache')">
+                    <i class="fas fa-award"></i>
+                    Moustache
+                </button>
+            </div>
+        </div>
+        
+        <!-- Wash Panel -->
+        <div class="tools-panel" id="washPanel">
+            <button class="close-btn" onclick="closePanel('wash')"><i class="fas fa-times"></i></button>
+            <h2>🚿 Wash & Clean 🛁</h2>
+            <div class="tools-grid">
+                <button class="tool-btn" onclick="useTool('shampoo')">
+                    <i class="fas fa-pump-soap"></i>
+                    Shampoo
+                </button>
+                <button class="tool-btn" onclick="useTool('conditioner')">
+                    <i class="fas fa-spa"></i>
+                    Conditioner
+                </button>
+                <button class="tool-btn" onclick="useTool('detangler')">
+                    <i class="fas fa-wind"></i>
+                    Detangler
+                </button>
+                <button class="tool-btn" onclick="useTool('flea')">
+                    <i class="fas fa-bug"></i>
+                    Flea Treatment
+                </button>
+                <button class="tool-btn" onclick="useTool('sponge')">
+                    <i class="fas fa-hand-sparkles"></i>
+                    Sponge
+                </button>
+                <button class="tool-btn" onclick="useTool('brush')">
+                    <i class="fas fa-paint-brush"></i>
+                    Brush
+                </button>
+                <button class="tool-btn" onclick="useTool('towel')">
+                    <i class="fas fa-tshirt"></i>
+                    Towel
+                </button>
+                <button class="tool-btn" onclick="useTool('dryer')">
+                    <i class="fas fa-wind"></i>
+                    Hair Dryer
+                </button>
+            </div>
+        </div>
+        
+        <!-- Style Panel -->
+        <div class="tools-panel" id="stylePanel">
+            <button class="close-btn" onclick="closePanel('style')"><i class="fas fa-times"></i></button>
+            <h2>✨ Style & Color ✨</h2>
+            <div class="tools-grid">
+                <button class="tool-btn" onclick="changeColor('pink')">
+                    <i class="fas fa-palette" style="color: #FF9BB3;"></i>
+                    Pink
+                </button>
+                <button class="tool-btn" onclick="changeColor('blue')">
+                    <i class="fas fa-palette" style="color: #A2D7D8;"></i>
+                    Blue
+                </button>
+                <button class="tool-btn" onclick="changeColor('purple')">
+                    <i class="fas fa-palette" style="color: #B19CD9;"></i>
+                    Purple
+                </button>
+                <button class="tool-btn" onclick="changeColor('rainbow')">
+                    <i class="fas fa-rainbow"></i>
+                    Rainbow
+                </button>
+                <button class="tool-btn" onclick="addDecal('hearts')">
+                    <i class="fas fa-heart" style="color: red;"></i>
+                    Hearts
+                </button>
+                <button class="tool-btn" onclick="addDecal('stars')">
+                    <i class="fas fa-star" style="color: gold;"></i>
+                    Stars
+                </button>
+                <button class="tool-btn" onclick="addDecal('sparkles')">
+                    <i class="fas fa-sparkles" style="color: silver;"></i>
+                    Sparkles
+                </button>
+                <button class="tool-btn" onclick="addDecal('glitter')">
+                    <i class="fas fa-sun" style="color: gold;"></i>
+                    Glitter
+                </button>
+            </div>
+        </div>
+        
+        <!-- Accessorize Panel -->
+        <div class="tools-panel" id="accessorizePanel">
+            <button class="close-btn" onclick="closePanel('accessorize')"><i class="fas fa-times"></i></button>
+            <h2>🎀 Pet Accessories 🎀</h2>
+            <div class="accessories">
+                <div class="accessory-category">
+                    <h3>Hats</h3>
+                    <div class="accessory-items">
+                        <div class="accessory-item" onclick="addAccessory('hat1')">
+                            <i class="fas fa-hat-cowboy" style="color: brown;"></i>
+                        </div>
+                        <div class="accessory-item" onclick="addAccessory('hat2')">
+                            <i class="fas fa-crown" style="color: gold;"></i>
+                        </div>
+                        <div class="accessory-item" onclick="addAccessory('hat3')">
+                            <i class="fas fa-hat-wizard" style="color: purple;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accessory-category">
+                    <h3>Collars</h3>
+                    <div class="accessory-items">
+                        <div class="accessory-item" onclick="addAccessory('collar1')">
+                            <i class="fas fa-ring" style="color: red;"></i>
+                        </div>
+                        <div class="accessory-item" onclick="addAccessory('collar2')">
+                            <i class="fas fa-gem" style="color: blue;"></i>
+                        </div>
+                        <div class="accessory-item" onclick="addAccessory('collar3')">
+                            <i class="fas fa-bell" style="color: silver;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accessory-category">
+                    <h3>Glasses</h3>
+                    <div class="accessory-items">
+                        <div class="accessory-item" onclick="addAccessory('glasses1')">
+                            <i class="fas fa-glasses" style="color: black;"></i>
+                        </div>
+                        <div class="accessory-item" onclick="addAccessory('glasses2')">
+                            <i class="fas fa-sun" style="color: darkblue;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+         const state = {
+            coins: 250,
+            happiness: 80,
+            cleanliness: 30, // Start with a dirty pet
+            currentStyle: 'default',
+            currentColor: 'default',
+            accessories: [],
+            decals: [],
+            isDirty: true
+        };
+        
+        // DOM elements
+        const petDisplay = document.getElementById('petDisplay');
+        const coinsEl = document.getElementById('coins');
+        const happinessEl = document.getElementById('happiness');
+        const cleanlinessEl = document.getElementById('cleanliness');
+        const petBase = document.getElementById('petBase');
+        
+        // Dirty elements
+        let dirtyOverlay;
+        let dirtyPaws = [];
+        
+        // Initialize dirty pet
+        function makePetDirty() {
+            // Remove any existing dirty elements
+            if (dirtyOverlay) dirtyOverlay.remove();
+            dirtyPaws.forEach(paw => paw.remove());
+            dirtyPaws = [];
+            
+            // Create dirt overlay
+            dirtyOverlay = document.createElement('div');
+            dirtyOverlay.className = 'dirty-overlay';
+            petDisplay.appendChild(dirtyOverlay);
+            
+            // Create dirty paw marks (random positions)
+            for (let i = 0; i < 5; i++) {
+                const paw = document.createElement('div');
+                paw.className = 'dirty-paws';
+                paw.style.left = `${Math.random() * 80 + 10}%`;
+                paw.style.top = `${Math.random() * 80 + 10}%`;
+                paw.style.opacity = Math.random() * 0.5 + 0.3;
+                paw.style.transform = `scale(${Math.random() * 0.5 + 0.5}) rotate(${Math.random() * 360}deg)`;
+                petDisplay.appendChild(paw);
+                dirtyPaws.push(paw);
+            }
+            
+            // Update pet image to dirty version
+            petBase.src = "puppy1.png";
+            state.isDirty = true;
+        }
+        
+        // Clean the pet
+        function cleanPet() {
+            if (!state.isDirty) return;
+            
+            // Create clean animation effect
+            const cleanEffect = document.createElement('div');
+            cleanEffect.className = 'clean-effect';
+            petDisplay.appendChild(cleanEffect);
+            
+            // Animate cleaning
+            cleanEffect.style.animation = 'cleanAnimation 1.5s forwards';
+            
+            // Remove after animation
+            setTimeout(() => {
+                cleanEffect.remove();
+                
+                // Remove dirt elements
+                if (dirtyOverlay) dirtyOverlay.remove();
+                dirtyPaws.forEach(paw => paw.remove());
+                dirtyPaws = [];
+                
+                // Change to clean pet image
+                petBase.src = "puppy1.png";
+                state.isDirty = false;
+                
+                // Update cleanliness
+                state.cleanliness = 100;
+                cleanlinessEl.textContent = state.cleanliness;
+                
+                showMessage("Your pet is sparkling clean now!");
+            }, 1500);
+        }
+        
+        // Modified wash function
+        function useTool(tool) {
+            playSound('click');
+            
+            switch(tool) {
+                case 'scissors':
+                case 'clippers':
+                case 'comb':
+                    state.happiness = Math.max(0, state.happiness - 5);
+                    state.coins += 10;
+                    showMessage("Snip snip! Your pet looks neater now!");
+                    break;
+                case 'brush':
+                    state.happiness += 5;
+                    state.cleanliness += 5;
+                    showMessage("Brushing feels nice! Your pet is happier.");
+                    break;
+                case 'shampoo':
+                case 'conditioner':
+                case 'sponge':
+                    state.cleanliness += 25;
+                    state.happiness += 2;
+                    showMessage("Bubbles everywhere! Your pet is getting cleaner.");
+                    animateBubbles();
+                    
+                    // Check if pet is now clean
+                    if (state.cleanliness >= 80 && state.isDirty) {
+                        cleanPet();
+                    }
+                    break;
+                case 'dryer':
+                    state.cleanliness += 5;
+                    state.happiness -= 3;
+                    showMessage("The dryer is a bit loud but your pet is dry now.");
+                    break;
+                default:
+                    showMessage("Tool used!");
+            }
+            
+            state.happiness = Math.min(100, state.happiness);
+            state.cleanliness = Math.min(100, state.cleanliness);
+            
+            updateUI();
+        }
+        
+        // Initialize with dirty pet
+        window.onload = function() {
+            updateUI();
+            makePetDirty();
+        };
+        
+        // Panel controls
+        function openPanel(panelName) {
+            document.getElementById(`${panelName}Panel`).style.display = 'block';
+        }
+        
+        function closePanel(panelName) {
+            document.getElementById(`${panelName}Panel`).style.display = 'none';
+        }
+        
+        // Tool functions
+        function useTool(tool) {
+            // Play sound effect
+            playSound('click');
+            
+            // Different effects for different tools
+            switch(tool) {
+                case 'scissors':
+                case 'clippers':
+                case 'comb':
+                    state.happiness = Math.max(0, state.happiness - 5);
+                    state.coins += 10;
+                    showMessage("Snip snip! Your pet looks neater now!");
+                    break;
+                case 'brush':
+                    state.happiness += 5;
+                    state.cleanliness += 5;
+                    showMessage("Brushing feels nice! Your pet is happier.");
+                    break;
+                case 'shampoo':
+                case 'conditioner':
+                case 'sponge':
+                    state.cleanliness += 15;
+                    state.happiness += 2;
+                    showMessage("Bubbles everywhere! Your pet is cleaner now.");
+                    animateBubbles();
+                    break;
+                case 'dryer':
+                    state.cleanliness += 5;
+                    state.happiness -= 3;
+                    showMessage("The dryer is a bit loud but your pet is dry now.");
+                    break;
+                default:
+                    showMessage("Tool used!");
+            }
+            
+            // Cap stats
+            state.happiness = Math.min(100, state.happiness);
+            state.cleanliness = Math.min(100, state.cleanliness);
+            
+            updateUI();
+        }
+        
+        // Style functions
+        function applyStyle(style) {
+            playSound('success');
+            state.currentStyle = style;
+            
+            // Change pet image based on style
+            let imageUrl;
+            switch(style) {
+                case 'puppy':
+                    imageUrl = "1000092396.png";
+                    showMessage("Adorable puppy cut!");
+                    break;
+                case 'spikes':
+                    imageUrl = "1000092398.png";
+                    showMessage("Cool ! Your pet is punk now!");
+                    break;
+                case 'pigtails':
+                    imageUrl = "1000092397.png";
+                    showMessage("Cute pigtails");
+                    break;
+                case 'moustache':
+                    imageUrl = "1000092399.png";
+                    showMessage("Fancy cut! Ready for the competition!");
+                    break;
+                default:
+                    imageUrl = "puppy1.png";
+            }
+            
+            petBase.src = imageUrl;
+            state.coins += 25;
+            state.happiness += 5;
+            updateUI();
+            createConfetti();
+        }
+        
+        // Color functions
+        function changeColor(color) {
+            playSound('click');
+            state.currentColor = color;
+            
+            // Apply color filter to pet image
+            let filter = '';
+            switch(color) {
+                case 'pink':
+                    filter = 'sepia(50%) saturate(500%) hue-rotate(300deg)';
+                    break;
+                case 'blue':
+                    filter = 'sepia(30%) saturate(500%) hue-rotate(160deg)';
+                    break;
+                case 'purple':
+                    filter = 'sepia(30%) saturate(600%) hue-rotate(240deg)';
+                    break;
+                case 'rainbow':
+                    filter = 'sepia(50%) saturate(600%) hue-rotate(180deg)';
+                    // Animate rainbow colors
+                    animateRainbow();
+                    break;
+                default:
+                    filter = 'none';
+            }
+            
+            petBase.style.filter = filter;
+            state.coins += 15;
+            updateUI();
+        }
+        
+        // Accessory functions
+        function addAccessory(accessory) {
+            playSound('click');
+            
+            if (!state.accessories.includes(accessory)) {
+                state.accessories.push(accessory);
+                
+                // Create accessory element
+                const accessoryEl = document.createElement('div');
+                accessoryEl.className = 'pet-part';
+                accessoryEl.id = accessory;
+                
+                // Set icon based on accessory type
+                if (accessory.includes('hat')) {
+                    accessoryEl.innerHTML = '<i class="fas fa-hat-cowboy" style="font-size: 3rem; color: brown;"></i>';
+                    accessoryEl.style.top = '20px';
+                } else if (accessory.includes('collar')) {
+                    accessoryEl.innerHTML = '<i class="fas fa-ring" style="font-size: 2rem; color: red;"></i>';
+                    accessoryEl.style.bottom = '80px';
+                } else if (accessory.includes('glasses')) {
+                    accessoryEl.innerHTML = '<i class="fas fa-glasses" style="font-size: 2rem; color: black;"></i>';
+                    accessoryEl.style.top = '120px';
+                }
+                
+                petDisplay.appendChild(accessoryEl);
+                state.coins += 20;
+                state.happiness += 3;
+                updateUI();
+                showMessage("Looking stylish!");
+            } else {
+                showMessage("Your pet is already wearing that!");
+            }
+        }
+        
+        // Decal functions
+        function addDecal(decal) {
+            playSound('click');
+            
+            if (!state.decals.includes(decal)) {
+                state.decals.push(decal);
+                
+                const decalEl = document.createElement('div');
+                decalEl.className = 'pet-part';
+                decalEl.style.fontSize = '2rem';
+                
+                switch(decal) {
+                    case 'hearts':
+                        decalEl.innerHTML = '<i class="fas fa-heart" style="color: red;"></i>';
+                        decalEl.style.left = '180px';
+                        decalEl.style.top = '100px';
+                        break;
+                    case 'stars':
+                        decalEl.innerHTML = '<i class="fas fa-star" style="color: gold;"></i>';
+                        decalEl.style.left = '150px';
+                        decalEl.style.top = '150px';
+                        break;
+                    case 'sparkles':
+                        decalEl.innerHTML = '<i class="fas fa-sparkles" style="color: silver;"></i>';
+                        decalEl.style.left = '200px';
+                        decalEl.style.top = '80px';
+                        break;
+                    case 'glitter':
+                        decalEl.innerHTML = '<i class="fas fa-sun" style="color: gold;"></i>';
+                        decalEl.style.left = '170px';
+                        decalEl.style.top = '120px';
+                        break;
+                }
+                
+                petDisplay.appendChild(decalEl);
+                state.coins += 10;
+                updateUI();
+                animateSparkles();
+            }
+        }
+        
+        // Play with pet
+        function playWithPet() {
+            playSound('happy');
+            state.happiness = Math.min(100, state.happiness + 15);
+            state.cleanliness = Math.max(0, state.cleanliness - 5);
+            
+            // Animate pet
+            petBase.style.transform = 'translateY(-10px)';
+            setTimeout(() => {
+                petBase.style.transform = 'translateY(0)';
+            }, 300);
+            
+            showMessage("Wheee! Your pet loves playing!");
+            updateUI();
+            createConfetti();
+        }
+        
+        // Take photo
+        function takePhoto() {
+            playSound('camera');
+            showMessage("Say cheese! Photo saved to your gallery!");
+            state.coins += 30;
+            state.happiness += 5;
+            updateUI();
+            
+            // Flash effect
+            petDisplay.style.backgroundColor = 'white';
+            setTimeout(() => {
+                petDisplay.style.backgroundColor = 'transparent';
+            }, 200);
+        }
+        
+        // Helper functions
+        function showMessage(msg) {
+            const messageEl = document.createElement('div');
+            messageEl.textContent = msg;
+            messageEl.style.position = 'fixed';
+            messageEl.style.bottom = '20px';
+            messageEl.style.left = '50%';
+            messageEl.style.transform = 'translateX(-50%)';
+            messageEl.style.backgroundColor = 'white';
+            messageEl.style.padding = '10px 20px';
+            messageEl.style.borderRadius = '20px';
+            messageEl.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+            messageEl.style.zIndex = '1000';
+            messageEl.style.animation = 'fadeInOut 3s forwards';
+            
+            document.body.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.remove();
+            }, 3000);
+        }
+        
+        function playSound(type) {
+            // In a real app, you would play actual sound effects here
+            console.log(`Playing ${type} sound`);
+        }
+        
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.borderRadius = '50%';
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = confetti.style.width;
+                
+                document.body.appendChild(confetti);
+                
+                // Animate
+                setTimeout(() => {
+                    confetti.style.opacity = '1';
+                    confetti.style.animation = `float ${Math.random() * 2 + 1}s forwards`;
+                }, 0);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+        
+        function animateBubbles() {
+            for (let i = 0; i < 20; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'confetti';
+                bubble.style.left = `${Math.random() * 80 + 10}%`;
+                bubble.style.bottom = '30%';
+                bubble.style.backgroundColor = 'rgba(255,255,255,0.7)';
+                bubble.style.borderRadius = '50%';
+                bubble.style.width = `${Math.random() * 30 + 10}px`;
+                bubble.style.height = bubble.style.width;
+                
+                petDisplay.appendChild(bubble);
+                
+                // Animate
+                setTimeout(() => {
+                    bubble.style.opacity = '1';
+                    bubble.style.bottom = '100%';
+                    bubble.style.transition = `bottom ${Math.random() * 2 + 1}s linear`;
+                }, 0);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    bubble.remove();
+                }, 3000);
+            }
+        }
+        
+        function animateSparkles() {
+            for (let i = 0; i < 10; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'confetti';
+                sparkle.style.left = `${Math.random() * 80 + 10}%`;
+                sparkle.style.top = `${Math.random() * 80 + 10}%`;
+                sparkle.style.backgroundColor = 'gold';
+                sparkle.style.width = '5px';
+                sparkle.style.height = '5px';
+                sparkle.style.borderRadius = '50%';
+                sparkle.style.boxShadow = '0 0 5px gold';
+                
+                petDisplay.appendChild(sparkle);
+                
+                // Animate
+                setTimeout(() => {
+                    sparkle.style.opacity = '1';
+                    sparkle.style.transform = 'scale(2)';
+                    sparkle.style.transition = 'all 0.5s';
+                }, 0);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    sparkle.style.opacity = '0';
+                    setTimeout(() => sparkle.remove(), 500);
+                }, 1000);
+            }
+        }
+        
+        function animateRainbow() {
+            let hue = 0;
+            const interval = setInterval(() => {
+                hue = (hue + 5) % 360;
+                petBase.style.filter = `sepia(50%) saturate(600%) hue-rotate(${hue}deg)`;
+            }, 100);
+            
+            setTimeout(() => {
+                clearInterval(interval);
+                petBase.style.filter = 'none';
+                state.currentColor = 'default';
+            }, 3000);
+        }
+        
+        // Initialize
+        updateUI();
+        
+        // Add some CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInOut {
+                0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+                80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+                100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            }
+            
+            .pet-image {
+                transition: all 0.3s;
+            }
+            
+            .pet-image:hover {
+                transform: scale(1.05) rotate(5deg);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
